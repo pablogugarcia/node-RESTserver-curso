@@ -21,7 +21,7 @@ app.post('/usuario', function (req, res) {
     let body = req.body;
     if (body.nombre === undefined) {
 
-        res.status({
+        res.status(400).send({
             ok: false,
             mensaje: 'Es requerido el nombre'
         });

@@ -1,10 +1,20 @@
 require('./config/config');
+require('colors');
 
 
 const express = require('express');
+const mongoose = require('mongoose');
+
+
+
 const app = express();
 const bodyParser = require('body-parser');
 const port = process.env.PORT;
+
+
+
+
+// body-parser (npm)
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -12,33 +22,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-app.get('/usuario', function (req, res) {
-    res.json('Hello World')
-})
 
-app.post('/usuario', function (req, res) {
+// mongodb mongoose
 
-    let body = req.body;
-    if (body.nombre === undefined) {
+mongoose.connect(process.env.URL_DB,
+    { useNewUrlParser: true, useCreateIndex: true }, (err, res) => {
+        if (err) throw err;
+        console.log(`Base de datos Online`.yellow);
+    });
 
-        res.status(400).send({
-            ok: false,
-            mensaje: 'Es requerido el nombre'
-        });
+app.use(require('./routes/usuario'));
 
-    } else {
-        res.json({
-            persona: body
-        });
-    }
-})
 
-app.put('/usuario', function (req, res) {
-    res.json('Hello World')
-})
-
-app.delete('/usuario', function (req, res) {
-    res.json('Hello World')
-})
-
-app.listen(port, () => console.log(`Esuchando el puerto ${port}`))
+app.listen(port, () => console.log(`Esuchando el puerto ${port}`.italic))

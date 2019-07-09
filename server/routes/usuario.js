@@ -4,29 +4,29 @@ const _ = require('underscore');
 const bcrypt = require('bcrypt');
 
 const saltRounds = 10;
-
+const { verificaToken, verificaADMIN_ROLE } = require('../middlewares/autenticacion');
 const Usuario = require('../config/models/usuario');
 
-app.get('/usuario', function (req, res) {
+app.get('/usuario', verificaToken, function (req, res) {
 
 
     let desde = Number(req.query.desde) || 0;
     let limite = Number(req.query.limite) || 5;
 
 
-    Usuario.find({estado : true}, '-password')
+    Usuario.find({ estado: true }, '-password')
         .skip(desde)
         .limit(limite)
         .exec((err, usuarios) => {
             if (err) res.status(400).json({ ok: false, err });
-            Usuario.countDocuments({estado: true}, (err, count) => {
+            Usuario.countDocuments({ estado: true }, (err, count) => {
                 if (err) throw new Error('Error en conteo', err);
                 res.json({ ok: true, usuarios, cantidad: count });
             });
         });
 });
 
-app.post('/usuario', function (req, res) {
+app.post('/usuario', [verificaToken, verificaADMIN_ROLE], (req, res) => {
 
     let body = req.body;
     let usuario = new Usuario({
@@ -44,7 +44,7 @@ app.post('/usuario', function (req, res) {
 
 })
 
-app.put('/usuario/:id', function (req, res) {
+app.put('/usuario/:id', [verificaToken, verificaADMIN_ROLE], (req, res) => {
 
     let id = req.params.id;
     let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'estado']);
@@ -58,7 +58,7 @@ app.put('/usuario/:id', function (req, res) {
 
 })
 
-app.delete('/usuario/:id', function (req, res) {
+app.delete('/usuario/:id', [verificaToken, verificaADMIN_ROLE], (req, res) => {
 
 
     let id = req.params.id;
@@ -68,7 +68,7 @@ app.delete('/usuario/:id', function (req, res) {
 
 
 
-    Usuario.findByIdAndUpdate(id, cambioEstado, { new: true}, (err, usuarioDB) => {
+    Usuario.findByIdAndUpdate(id, cambioEstado, { new: true }, (err, usuarioDB) => {
         if (err) return res.status(400).json({ ok: false, err });
         res.json({ ok: true, usuarioDB });
     })

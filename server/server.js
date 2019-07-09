@@ -23,6 +23,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 
+
 // mongodb mongoose
 
 mongoose.connect(process.env.URL_DB,
@@ -31,7 +32,8 @@ mongoose.connect(process.env.URL_DB,
         console.log(`Base de datos Online`.yellow);
     });
 
-app.use(require('./routes/usuario'));
+// Exportaciones de rutas
+app.use(require('./routes/index'));
 
 
 app.listen(port, () => console.log(`Esuchando el puerto ${port}`.italic))

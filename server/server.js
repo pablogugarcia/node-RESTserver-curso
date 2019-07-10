@@ -4,6 +4,7 @@ require('colors');
 
 const express = require('express');
 const mongoose = require('mongoose');
+const path = require('path');
 
 
 
@@ -22,7 +23,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-
+// public
+app.use(express.static(path.resolve(__dirname ,'../public')));
 
 // mongodb mongoose
 

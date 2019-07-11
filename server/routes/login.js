@@ -9,7 +9,7 @@ const client = new OAuth2Client(process.env.CLIENT_ID);
 
 const bcrypt = require('bcrypt');
 
-const Usuario = require('../config/models/usuario');
+const Usuario = require('../models/usuario');
 
 app.post('/login', (req, res) => {
 

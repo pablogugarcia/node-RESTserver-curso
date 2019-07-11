@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 
 const saltRounds = 10;
 const { verificaToken, verificaADMIN_ROLE } = require('../middlewares/autenticacion');
-const Usuario = require('../config/models/usuario');
+const Usuario = require('../models/usuario');
 
 app.get('/usuario', verificaToken, function (req, res) {
 

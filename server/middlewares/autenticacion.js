@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 
 let verificaToken = (req, res, next) => {
 
-    let token = req.get('token');
+    let token = req.query.token ? req.query.token : req.get('token');
 
     if(!token){
         res.status(400).json({ok:false, message: 'No existe un toquen'})
@@ -35,6 +35,7 @@ let verificaADMIN_ROLE = (req, res, next) => {
         return res.status(401).json({ ok: false, message: 'Usuario no es admin' });
     }
 }
+
 
 module.exports = {
     verificaToken,
